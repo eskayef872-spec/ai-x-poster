@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="theme-color" content="#08090d">
+    <meta name="description" content="AI powered X post generator">
+
+    <title>AI X Poster</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="background-glow glow-one"></div>
+    <div class="background-glow glow-two"></div>
+
+    <main class="app">
+
+        <!-- HEADER -->
+        <header class="header">
+
+            <div class="brand">
+                <div class="brand-icon">𝕏</div>
+
+                <div>
+                    <h1>AI X Poster</h1>
+                    <p>AI-powered content creator</p>
+                </div>
+            </div>
+
+            <div class="status">
+                <span class="status-dot"></span>
+                <span>Ready</span>
+            </div>
+
+        </header>
+
+
+        <!-- HERO -->
+        <section class="hero">
+
+            <div class="badge">
+                <span>✦</span>
+                AI CONTENT AUTOMATION
+            </div>
+
+            <h2>
+                Turn an idea into an
+                <span>X post.</span>
+            </h2>
+
+            <p class="hero-description">
+                Enter a topic and generate a ready-to-post caption,
+                hashtags and image.
+            </p>
+
+        </section>
+
+
+        <!-- GENERATOR -->
+        <section class="card generator-card">
+
+            <div class="section-title">
+                <div>
+                    <h3>Create your post</h3>
+                    <p>What do you want to post about?</p>
+                </div>
+
+                <span class="step-number">01</span>
+            </div>
+
+
+            <div class="input-wrapper">
+
+                <label for="topic">TOPIC</label>
+
+                <textarea
+                    id="topic"
+                    maxlength="500"
+                    rows="4"
+                    placeholder="Example: Android 16 new features..."
+                ></textarea>
+
+                <div class="input-footer">
+                    <span id="topicHint">
+                        Be specific for better results
+                    </span>
+
+                    <span id="topicCounter">0 / 500</span>
+                </div>
+
+            </div>
+
+
+            <button id="generateBtn" class="generate-btn">
+
+                <span class="btn-icon">✦</span>
+
+                <span class="btn-text">
+                    Generate Post
+                </span>
+
+                <span class="btn-arrow">→</span>
+
+            </button>
+
+        </section>
+
+
+        <!-- RESULT -->
+        <section id="resultSection" class="result-section hidden">
+
+            <div class="section-title result-heading">
+
+                <div>
+                    <h3>Generated Post</h3>
+                    <p>Review your content before posting</p>
+                </div>
+
+                <span class="step-number">02</span>
+
+            </div>
+
+
+            <!-- IMAGE -->
+            <div class="card image-card">
+
+                <div class="image-header">
+                    <span>GENERATED IMAGE</span>
+
+                    <button id="regenerateImageBtn" class="small-btn">
+                        ↻ Regenerate
+                    </button>
+                </div>
+
+                <div id="imagePreview" class="image-preview">
+
+                    <div class="image-placeholder">
+                        <div class="placeholder-icon">✦</div>
+
+                        <span>Your AI image will appear here</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- CAPTION -->
+            <div class="card caption-card">
+
+                <div class="caption-header">
+
+                    <div>
+                        <span>CAPTION</span>
+                    </div>
+
+                    <div id="characterStatus" class="character-status">
+                        0 / 280
+                    </div>
+
+                </div>
+
+
+                <textarea
+                    id="caption"
+                    class="caption-input"
+                    maxlength="280"
+                    placeholder="Generated caption..."
+                ></textarea>
+
+
+                <div class="caption-footer">
+
+                    <span id="captionStatus">
+                        X-ready caption
+                    </span>
+
+                    <button id="copyBtn" class="small-btn">
+                        ⧉ Copy
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- ACTIONS -->
+            <div class="actions">
+
+                <button id="regenerateBtn" class="secondary-btn">
+                    ↻ Regenerate
+                </button>
+
+                <button id="postBtn" class="post-btn">
+                    <span>𝕏</span>
+                    Post to X
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- HOW IT WORKS -->
+        <section class="how-section">
+
+            <div class="section-title">
+
+                <div>
+                    <h3>How it works</h3>
+                    <p>Simple three-step workflow</p>
+                </div>
+
+            </div>
+
+
+            <div class="steps">
+
+                <div class="step">
+                    <div class="step-icon">01</div>
+
+                    <div>
+                        <strong>Enter topic</strong>
+                        <p>Tell the AI what you want to post about.</p>
+                    </div>
+                </div>
+
+
+                <div class="step">
+                    <div class="step-icon">02</div>
+
+                    <div>
+                        <strong>Generate</strong>
+                        <p>AI creates your caption, hashtags and image.</p>
+                    </div>
+                </div>
+
+
+                <div class="step">
+                    <div class="step-icon">03</div>
+
+                    <div>
+                        <strong>Post</strong>
+                        <p>Review and publish directly to X.</p>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- FOOTER -->
+        <footer>
+
+            <span>AI X Poster</span>
+
+            <span>•</span>
+
+            <span>Built for X creators</span>
+
+        </footer>
+
+    </main>
+
+
+    <!-- TOAST -->
+    <div id="toast" class="toast">
+
+        <div id="toastIcon" class="toast-icon">✓</div>
+
+        <div>
+            <strong id="toastTitle">Success</strong>
+            <p id="toastMessage">Done</p>
+        </div>
+
+    </div>
+
+
+    <script src="app.js"></script>
+
+</body>
+</html>
