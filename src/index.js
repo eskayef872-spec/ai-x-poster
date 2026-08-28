@@ -886,7 +886,7 @@ function extractPostFromReasoning(
         i--
     ) {
 
-        let candidate =
+        const candidate =
             cleanCaption(
                 quotedMatches[i][1]
             );
@@ -904,7 +904,7 @@ function extractPostFromReasoning(
 
 
     // --------------------------------------------------------
-    // 2. Line-by-line search
+    // 2. Clean lines
     // --------------------------------------------------------
 
     const lines =
@@ -917,7 +917,7 @@ function extractPostFromReasoning(
             .filter(Boolean);
 
 
-    const candidates = [];
+    const cleanedLines = [];
 
 
     for (
@@ -998,19 +998,14 @@ function extractPostFromReasoning(
             );
 
 
-        // Must contain hashtag
-        if (
-            !/#([A-Za-z0-9_]+)/.test(
-                candidate
-            )
-        ) {
+        if (!candidate) {
 
             continue;
 
         }
 
 
-        // Must not be reasoning
+        // Skip reasoning lines
         if (
             isReasoningLine(
                 candidate
@@ -1022,16 +1017,97 @@ function extractPostFromReasoning(
         }
 
 
-        // Must be valid X post
+        cleanedLines.push(
+            candidate
+        );
+
+    }
+
+
+    // --------------------------------------------------------
+    // 3. Find complete post
+    // --------------------------------------------------------
+
+    for (
+        let i =
+            cleanedLines.length - 1;
+
+        i >= 0;
+
+        i--
+    ) {
+
+        const current =
+            cleanedLines[i];
+
+
+        // ----------------------------------------------------
+        // Normal one-line post
+        // ----------------------------------------------------
+
         if (
+            /#[A-Za-z0-9_]+/.test(
+                current
+            ) &&
             isValidCaption(
-                candidate
+                current
             )
         ) {
 
-            candidates.push(
-                candidate
-            );
+            return current;
+
+        }
+
+
+        // ----------------------------------------------------
+        // Caption + hashtags split across lines
+        //
+        // Example:
+        //
+        // Android 16 brings exciting new features.
+        // #Android16 #Android
+        //
+        // The two lines are combined.
+        // ----------------------------------------------------
+
+        if (
+            /#[A-Za-z0-9_]+/.test(
+                current
+            ) &&
+            i > 0
+        ) {
+
+            const previous =
+                cleanedLines[i - 1];
+
+
+            if (
+                previous &&
+                !/#([A-Za-z0-9_]+)/.test(
+                    previous
+                ) &&
+                !isReasoningLine(
+                    previous
+                )
+            ) {
+
+                const combined =
+                    cleanCaption(
+                        `${previous} ${current}`
+                    );
+
+
+                if (
+                    isValidCaption(
+                        combined
+                    )
+                ) {
+
+                    return combined;
+
+                }
+
+            }
 
         }
 
@@ -1039,38 +1115,23 @@ function extractPostFromReasoning(
 
 
     // --------------------------------------------------------
-    // 3. Last valid candidate
+    // 4. Search complete reasoning text
+    //    for sentence + hashtags
     // --------------------------------------------------------
 
-    if (
-        candidates.length
-    ) {
-
-        return candidates[
-            candidates.length - 1
-        ];
-
-    }
-
-
-    // --------------------------------------------------------
-    // 4. Search whole reasoning for quoted-like
-    //    hashtag sentence
-    // --------------------------------------------------------
-
-    const hashtagSentences =
+    const hashtagMatches =
         text.match(
-            /[^.!?\n]{10,280}#[A-Za-z0-9_]+(?:\s+#[A-Za-z0-9_]+)*[^.!?\n]*/g
+            /[^.!?\n]{10,280}(?:[.!?])?\s*(?:#[A-Za-z0-9_]+(?:\s+#[A-Za-z0-9_]+)+)/g
         );
 
 
     if (
-        hashtagSentences
+        hashtagMatches
     ) {
 
         for (
             let i =
-                hashtagSentences.length - 1;
+                hashtagMatches.length - 1;
 
             i >= 0;
 
@@ -1079,7 +1140,7 @@ function extractPostFromReasoning(
 
             const candidate =
                 cleanCaption(
-                    hashtagSentences[i]
+                    hashtagMatches[i]
                 );
 
 
@@ -1094,6 +1155,30 @@ function extractPostFromReasoning(
             }
 
         }
+
+    }
+
+
+    // --------------------------------------------------------
+    // 5. Final fallback
+    // --------------------------------------------------------
+
+    const hashtagLines =
+        cleanedLines.filter(
+            line =>
+                /#[A-Za-z0-9_]+/.test(
+                    line
+                )
+        );
+
+
+    if (
+        hashtagLines.length
+    ) {
+
+        return hashtagLines[
+            hashtagLines.length - 1
+        ];
 
     }
 
@@ -2020,7 +2105,7 @@ async function testApiTweet(
                 !!cookie,
 
             message:
-                "ApiTweet authentication is working. No tweet was posted."
+                "ApiTweet authentication test is working. No tweet was posted."
 
         });
 
